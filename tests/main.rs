@@ -61,15 +61,16 @@ impl MyDBTrait for MyDB {
     pub async fn custom_error(self) -> Result<(), E> {
         Ok(())
     }
-    #[allow(unused)]
+    pub async fn public(self) -> Result<(), sqlx::Error> {
+        self.public_restricted().await?;
+        // TODO: Allow private functions to move to private side trait MyDBInner and be called from the connection impl
+        // self.non_public().await?;
+        Ok(())
+    }
+    #[allow(dead_code)] // TODO: remove the need of this?
     pub(crate) async fn public_restricted(self) -> Result<(), sqlx::Error> {
         Ok(())
     }
-    // TODO: Allow private functions to move to private side trait MyDBInner and be called from the connection impl
-    // pub async fn public(self) -> Result<(), sqlx::Error> {
-    //     self.non_public().await?;
-    //     Ok(())
-    // }
     // async fn non_public(self) -> Result<(), sqlx::Error> {
     //     Ok(())
     // }
